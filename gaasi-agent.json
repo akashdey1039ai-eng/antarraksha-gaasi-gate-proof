@@ -1,8 +1,10 @@
 {
-  "agent_id": "test-chatbot-v1",
-  "agent_name": "Test Chatbot v1",
-  "description": "CI/CD proof run – expected BLOCKED",
-  "tools": ["filesystem", "http", "shell"],
-  "permissions": ["read", "write", "execute"],
-  "deployment_scope": "production"
+  "agent_version": "1.0",
+  "risk_tier": "HIGH",
+  "capabilities": [
+    "network_access",
+    "file_write",
+    "command_execution"
+  ]
 }
+
