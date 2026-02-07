@@ -29,6 +29,7 @@ echo "📄 Using agent payload: $AGENT_PAYLOAD_PATH"
 RESPONSE=$(curl -sS -X POST "$GAASI_API_URL" \
   -H "Authorization: Bearer $GAASI_BEARER_TOKEN" \
   -H "Content-Type: application/json" \
+  -H "Idempotency-Key: ${IDEMPOTENCY_KEY}" \
   --data-binary @"$AGENT_PAYLOAD_PATH")
 
 echo "📡 GAASI response:"
