@@ -1,4 +1,5 @@
 {
+  "agent_id": "ci-gaasi-gate-proof",
   "agent_version": "1.0",
   "risk_tier": "HIGH",
   "capabilities": [
@@ -7,4 +8,5 @@
     "command_execution"
   ]
 }
+
 
