@@ -1,147 +1,149 @@
-# GAASI v1 — Global Autonomous Agent Survivability Index
+# GAASI Standard Declaration — v1 (Locked)
 
-GAASI is a **deploy-blocking, machine-verifiable survivability gate** for autonomous AI agents.
-
-It determines—**before deployment**—whether an autonomous agent is allowed to ship.
-
-GAASI is not advisory.
-GAASI is not a report.
-GAASI is a hard gate.
-
-If an agent fails survivability, **deployment is blocked**.
+**GAASI — Global Autonomous Agent Survivability Index**  
+**Public Deploy-Blocking Standard**
 
 ---
 
-## What GAASI Decides
+## 1. Declaration of Authority
 
-GAASI returns a **binding verdict**:
+GAASI is a **deploy-blocking, machine-verifiable survivability standard** for autonomous AI agents.
 
-- **PASS** → deployment allowed
-- **BLOCKED** → deployment rejected (CI fails)
+GAASI determines — **before deployment** — whether an autonomous agent is allowed to ship.
 
-This decision is:
-- Deterministic
-- Replayable
-- Cryptographically evidenced
-- Enforced inside CI/CD
+GAASI is **not advisory**.  
+GAASI is **not a report**.  
+GAASI is a **hard, non-overrideable gate**.
 
 ---
 
-## GAASI v1 Canonical Documents
+## 2. Binding Verdicts
 
-GAASI v1 is defined by **three authoritative documents**.
+GAASI returns exactly one of the following binding verdicts:
 
-These MUST be read together.
+- **PASS** — deployment allowed  
+- **BLOCKED** — deployment rejected (CI fails)
 
----
-
-### 1️⃣ GAASI Agent Specification (Schema)
-
-**File:** `GAASI_AGENT_SPEC.md`
-
-Defines:
-- The **exact JSON request shape**
-- Required vs optional fields
-- Closed schema rules
-- Version locking
-
-This document answers:
-> *“What must an agent declare to be evaluated?”*
-
-This is the **only allowed input format** for GAASI v1.
+A **BLOCKED** verdict **must prevent deployment** across all environments, including CI/CD, staging, and production.
 
 ---
 
-### 2️⃣ GAASI Field Semantics
+## 3. Scope of the Standard
 
-**File:** `GAASI_FIELD_SEMANTICS.md`
+GAASI v1 governs:
 
-Defines:
-- Exact meaning of every field
-- How GAASI interprets declarations
-- What affects survivability logic vs what is ignored
-- Risk-tier semantics and guarantees
+- Autonomous AI agents
+- Agentic systems with independent decision-making
+- Systems capable of acting beyond deterministic scripts
+- AI agents interacting with infrastructure, data, users, or external systems
 
-This document answers:
-> *“What does each field mean to GAASI?”*
-
-This is **behavioral**, not schema.
+GAASI v1 applies **globally**, independent of industry, geography, or deployment platform.
 
 ---
 
-### 3️⃣ GAASI Rejection Rules
+## 4. Canonical Definition (v1)
 
-**File:** `GAASI_REJECTION_RULES.md`
+GAASI v1 is defined **exclusively** by the following three authoritative documents:
 
-Defines:
-- All explicit rejection conditions
-- Schema-level failures
-- Versioning failures
-- Survivability failures
-- CI-observed rejected keys
+1. **GAASI Agent Specification (Schema)**  
+   `GAASI_AGENT_SPEC.md`
 
-This document answers:
-> *“Exactly why does GAASI say NO?”*
+2. **GAASI Field Semantics**  
+   `GAASI_FIELD_SEMANTICS.md`
 
-Every rejection is deterministic and logged.
+3. **GAASI Rejection Rules**  
+   `GAASI_REJECTION_RULES.md`
 
----
-
-## Evaluation Pipeline (v1)
-
-1. **Schema validation**
-   - Closed schema enforced
-   - Unknown keys rejected
-   - Required fields enforced
-
-2. **Semantic binding**
-   - Risk tier locked
-   - Capabilities bound
-   - Context ingested (if provided)
-
-3. **Adversarial evaluation**
-   - MAAR-driven failure synthesis
-   - Survivability scoring
-   - Threshold enforcement
-
-4. **Verdict issued**
-   - PASS or BLOCKED
-   - Evidence hash generated
-   - CI gate enforced
+These documents **must be interpreted together**.  
+Any behavior not explicitly defined within them is **out of scope** for GAASI v1.
 
 ---
 
-## Versioning Policy
+## 5. Evaluation Doctrine
 
-- GAASI v1 is **locked**
-- Any schema expansion requires:
-  - New version (v2)
-  - Explicit CI proof
-  - Backward compatibility strategy
+GAASI v1 evaluates autonomous agents using a fixed, deterministic pipeline:
 
-GAASI never silently changes behavior.
+1. **Schema Validation**
+   - Closed schema enforced  
+   - Unknown keys rejected  
+   - Required fields enforced  
 
-GAASI v1 behavior is immutable once released.
+2. **Semantic Binding**
+   - Risk tier locked (lower bound)  
+   - Capabilities bound  
+   - Context ingested (if provided)  
+
+3. **Adversarial Evaluation**
+   - MAAR-driven failure synthesis  
+   - Survivability scoring  
+   - Threshold enforcement  
+
+4. **Verdict Issuance**
+   - PASS or BLOCKED  
+   - Cryptographic evidence generated  
+   - CI gate enforced  
 
 ---
 
-## Design Principles (Non-Negotiable)
+## 6. Finality & Non-Overrideability
 
-- Explicit > implicit
-- Closed schemas
-- Deterministic parsing
-- CI-safe
-- Machine-verifiable only
-- No human judgment paths
+- GAASI verdicts are **final**
+- No human override paths exist
+- No configuration flags exist
+- No environment-based bypasses exist
+- Identical inputs **must** produce identical verdicts
+
+If an agent is **BLOCKED**, deployment **must not occur**.
 
 ---
 
-## Final Statement
+## 7. Evidence & Audit Guarantees
 
-> If an autonomous agent cannot survive adversarial conditions,
-> it does not deploy.
+Every GAASI evaluation:
 
-GAASI enforces this **globally, deterministically, and before release**.
+- Is deterministic
+- Is replayable
+- Produces cryptographic evidence
+- Is immutably logged
+- Is suitable for audit, certification, and regulatory review
 
-GAASI v1 is enforced via live CI gates and cannot be bypassed or overridden.
+---
 
+## 8. Version Lock
+
+- **GAASI v1 is locked**
+- GAASI v1 behavior is immutable once released
+- GAASI never silently changes behavior
+
+Any change requires:
+- A new version (v2+)
+- Explicit CI proof
+- A published backward-compatibility strategy
+
+---
+
+## 9. Design Principles (Non-Negotiable)
+
+- Explicit > implicit  
+- Closed schemas  
+- Deterministic parsing  
+- CI-safe enforcement  
+- Machine-verifiable only  
+- No human judgment paths  
+
+---
+
+## 10. Final Statement
+
+> **If an autonomous agent cannot survive adversarial conditions, it does not deploy.**
+
+GAASI enforces this **globally**, **deterministically**, and **before release**.
+
+**GAASI v1 is hereby declared a public, deploy-blocking standard.**
+
+---
+
+### Status
+
+**LOCKED — GAASI v1**  
+No amendments without a new version.
