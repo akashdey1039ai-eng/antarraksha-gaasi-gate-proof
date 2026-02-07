@@ -143,5 +143,5 @@ GAASI v1 behavior is immutable once released.
 
 GAASI enforces this **globally, deterministically, and before release**.
 
-GAASI v1 is enforced via live CI gates and cannot be overridden.
+GAASI v1 is enforced via live CI gates and cannot be bypassed or overridden.
 
