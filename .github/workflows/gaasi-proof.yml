@@ -18,5 +18,4 @@ jobs:
         env:
           GAASI_API_URL: https://antarraksha.ai/api/survivability-gate/evaluate
           GAASI_BEARER_TOKEN: ${{ secrets.GAASI_BEARER_TOKEN }}
-        with:
           agent_payload_path: gaasi-agent.json
