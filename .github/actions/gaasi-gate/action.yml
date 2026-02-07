@@ -1,22 +1,16 @@
-name: GAASI Survivability Gate Proof
+name: "Antarraksha GAASI Survivability Gate"
+description: "Blocks CI/CD if AI agent fails GAASI survivability evaluation"
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
+inputs:
+  agent_payload_path:
+    description: "Path to GAASI agent payload JSON"
+    required: true
 
-jobs:
-  gaasi-gate:
-    runs-on: ubuntu-latest
+runs:
+  using: "composite"
+  steps:
+    - run: chmod +x $GITHUB_ACTION_PATH/entrypoint.sh
+      shell: bash
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run Antarraksha GAASI Gate
-        uses: ./.github/actions/gaasi-gate
-        env:
-          GAASI_API_URL: https://antarraksha.ai/api/survivability-gate/evaluate
-          GAASI_BEARER_TOKEN: ${{ secrets.GAASI_BEARER_TOKEN }}
-        with:
-          agent_payload_path: gaasi-agent.json
+    - run: $GITHUB_ACTION_PATH/entrypoint.sh
+      shell: bash
