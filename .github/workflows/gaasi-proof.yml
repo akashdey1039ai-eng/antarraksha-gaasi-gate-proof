@@ -1,0 +1,22 @@
+name: GAASI Survivability Gate Proof
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  gaasi-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Antarraksha GAASI Gate
+        uses: ./.github/actions/gaasi-gate
+        env:
+          GAASI_API_URL: https://antarraksha.ai/api/survivability-gate/evaluate
+          GAASI_BEARER_TOKEN: ${{ secrets.GAASI_BEARER_TOKEN }}
+        with:
+          agent_payload_path: gaasi-agent.json
