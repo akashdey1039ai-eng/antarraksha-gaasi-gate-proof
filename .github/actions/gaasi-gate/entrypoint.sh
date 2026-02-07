@@ -2,6 +2,7 @@
 set -euo pipefail
 
 echo "🔐 GAASI Survivability Gate starting..."
+IDEMPOTENCY_KEY="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
 
 if [[ -z "${GAASI_API_URL:-}" ]]; then
   echo "❌ GAASI_API_URL not set"
