@@ -121,6 +121,8 @@ Every rejection is deterministic and logged.
 
 GAASI never silently changes behavior.
 
+GAASI v1 behavior is immutable once released.
+
 ---
 
 ## Design Principles (Non-Negotiable)
@@ -140,3 +142,6 @@ GAASI never silently changes behavior.
 > it does not deploy.
 
 GAASI enforces this **globally, deterministically, and before release**.
+
+GAASI v1 is enforced via live CI gates and cannot be overridden.
+
