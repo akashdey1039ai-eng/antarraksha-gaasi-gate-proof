@@ -1,16 +1,35 @@
-name: "Antarraksha GAASI Survivability Gate"
-description: "Blocks CI/CD if AI agent fails GAASI survivability evaluation"
-
+name: "GAASI Survivability Gate"
+description: "Deploy-blocking GAASI gate (composite action)"
 inputs:
-  agent_payload_path:
-    description: "Path to GAASI agent payload JSON"
+  api_url:
+    description: "GAASI API base URL / endpoint"
     required: true
+  api_key:
+    description: "GAASI CI token / key"
+    required: true
+  agent_payload_path:
+    description: "Path to agent payload JSON in repo"
+    required: true
+  fail_on:
+    description: "Which verdict should fail the job (e.g., BLOCKED)"
+    required: false
+    default: "BLOCKED"
+  timeout_seconds:
+    description: "Request timeout in seconds"
+    required: false
+    default: "30"
 
 runs:
   using: "composite"
   steps:
-    - run: chmod +x $GITHUB_ACTION_PATH/entrypoint.sh
+    - name: Run GAASI Gate
       shell: bash
-
-    - run: $GITHUB_ACTION_PATH/entrypoint.sh
-      shell: bash
+      env:
+        GAASI_API_URL: ${{ inputs.api_url }}
+        GAASI_API_KEY: ${{ inputs.api_key }}
+        GAASI_PAYLOAD_PATH: ${{ inputs.agent_payload_path }}
+        GAASI_FAIL_ON: ${{ inputs.fail_on }}
+        GAASI_TIMEOUT: ${{ inputs.timeout_seconds }}
+      run: |
+        chmod +x "$GITHUB_ACTION_PATH/entrypoint.sh"
+        "$GITHUB_ACTION_PATH/entrypoint.sh"
