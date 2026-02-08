@@ -22,7 +22,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Run GAASI Gate
+    - name: Run GAASI Survivability Gate
+      id: gate
       shell: bash
       env:
         GAASI_API_URL: ${{ inputs.api_url }}
@@ -30,6 +31,5 @@ runs:
         GAASI_PAYLOAD_PATH: ${{ inputs.agent_payload_path }}
         GAASI_FAIL_ON: ${{ inputs.fail_on }}
         GAASI_TIMEOUT: ${{ inputs.timeout_seconds }}
-      run: |
-        chmod +x "$GITHUB_ACTION_PATH/entrypoint.sh"
-        "$GITHUB_ACTION_PATH/entrypoint.sh"
+      run: chmod +x ${{ github.action_path }}/entrypoint.sh && 
+       ${{ github.action_path }}/entrypoint.sh
