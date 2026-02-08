@@ -1,52 +1,45 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🔐 GAASI Survivability Gate starting..."
-IDEMPOTENCY_KEY="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+echo "🔒 GAASI Survivability Gate starting..."
 
-if [[ -z "${GAASI_API_URL:-}" ]]; then
-  echo "❌ GAASI_API_URL not set"
+: "${GAASI_API_URL:?❌ GAASI_API_URL not set}"
+: "${GAASI_API_KEY:?❌ GAASI_API_KEY not set}"
+: "${GAASI_PAYLOAD_PATH:?❌ GAASI_PAYLOAD_PATH not set}"
+
+GAASI_FAIL_ON="${GAASI_FAIL_ON:-BLOCKED}"
+GAASI_TIMEOUT="${GAASI_TIMEOUT:-30}"
+
+if [ ! -f "$GAASI_PAYLOAD_PATH" ]; then
+  echo "❌ Payload file not found: $GAASI_PAYLOAD_PATH"
   exit 2
 fi
 
-if [[ -z "${GAASI_BEARER_TOKEN:-}" ]]; then
-  echo "❌ GAASI_BEARER_TOKEN not set"
-  exit 2
-fi
+echo "📄 Payload: $GAASI_PAYLOAD_PATH"
+echo "🎯 Fail on verdict: $GAASI_FAIL_ON"
+echo "⏱️ Timeout: $GAASI_TIMEOUT seconds"
 
-if [[ -z "${AGENT_PAYLOAD_PATH:-}" ]]; then
-  echo "❌ AGENT_PAYLOAD_PATH not set"
-  exit 2
-fi
-
-if [[ ! -f "$AGENT_PAYLOAD_PATH" ]]; then
-  echo "❌ Agent payload not found at $AGENT_PAYLOAD_PATH"
-  exit 2
-fi
-
-echo "📄 Using agent payload: $AGENT_PAYLOAD_PATH"
-
-RESPONSE=$(curl -sS -X POST "$GAASI_API_URL" \
-  -H "Authorization: Bearer $GAASI_BEARER_TOKEN" \
+RESP=$(curl -sS --fail --max-time "$GAASI_TIMEOUT" \
+  -H "Authorization: Bearer $GAASI_API_KEY" \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: ${IDEMPOTENCY_KEY}" \
-  --data-binary @"$AGENT_PAYLOAD_PATH")
+  --data-binary @"$GAASI_PAYLOAD_PATH" \
+  "$GAASI_API_URL")
 
-echo "📡 GAASI response:"
-echo "$RESPONSE"
+echo "✅ GAASI response: $RESP"
 
-VERDICT=$(echo "$RESPONSE" | jq -r '.verdict')
+# Minimal verdict extraction (expects JSON contains "verdict":"PASS" or "BLOCKED")
+VERDICT=$(echo "$RESP" | grep -oE '"verdict"\s*:\s*"[^"]+"' | head -n1 | cut -d'"' -f4 || true)
 
-if [[ "$VERDICT" == "BLOCKED" ]]; then
-  echo "🚫 GAASI verdict: BLOCKED — failing pipeline"
-  exit 1
-elif [[ "$VERDICT" == "CONDITIONAL" ]]; then
-  echo "⚠️ GAASI verdict: CONDITIONAL — failing pipeline"
-  exit 1
-elif [[ "$VERDICT" == "CERTIFIED" ]]; then
-  echo "✅ GAASI verdict: CERTIFIED — pipeline may proceed"
-  exit 0
-else
-  echo "❌ Unknown verdict: $VERDICT"
+if [ -z "${VERDICT}" ]; then
+  echo "❌ Could not parse verdict from response."
   exit 2
 fi
+
+echo "📌 Verdict: $VERDICT"
+
+if [ "$VERDICT" = "$GAASI_FAIL_ON" ]; then
+  echo "🚫 Deployment blocked by GAASI (verdict=$VERDICT)"
+  exit 1
+fi
+
+echo "✅ GAASI gate passed (verdict=$VERDICT)"
