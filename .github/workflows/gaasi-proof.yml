@@ -16,7 +16,7 @@ jobs:
       - name: Run Antarraksha GAASI Gate
         uses: ./.github/actions/gaasi-gate
         env:
-          GAASI_API_URL: https://antarraksha.ai/api/survivability-gate/evaluate
-          GAASI_BEARER_TOKEN: ${{ secrets.GAASI_BEARER_TOKEN }}
-          AGENT_PAYLOAD_PATH: gaasi-agent.json
-
+          api_url: https://antarraksha.ai/api/survivability-gate/evaluate
+          api_key: ${{ secrets.GAASI_API_KEY }}
+          agent_payload_path: gaasi-agent.json
+          fail_on: BLOCKED
