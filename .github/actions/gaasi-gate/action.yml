@@ -54,5 +54,10 @@ runs:
         export GAASI_PAYLOAD_PATH="${{ inputs.agent_payload_path }}"
         export GAASI_FAIL_ON="${{ inputs.fail_on }}"
         export GAASI_TIMEOUT="${{ inputs.timeout_seconds }}"
+        echo "DEBUG: GAASI_API_URL length=${#GAASI_API_URL}"
+        echo "DEBUG: GAASI_API_KEY length=${#GAASI_API_KEY}"
+        echo "DEBUG: GAASI_PAYLOAD_PATH=$GAASI_PAYLOAD_PATH"
+        echo "DEBUG: GAASI_FAIL_ON=$GAASI_FAIL_ON"
+        echo "DEBUG: GAASI_TIMEOUT=$GAASI_TIMEOUT"
         chmod +x ${{ github.action_path }}/entrypoint.sh
         ${{ github.action_path }}/entrypoint.sh
